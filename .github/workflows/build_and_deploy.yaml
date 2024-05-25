@@ -30,7 +30,7 @@ jobs:
         with:
           context: .
           push: true
-          tags: minjuncho/team4-fe:${{ env.IMAGE_TAG }}
+          tags: minjuncho/ai4028-fe:${{ env.IMAGE_TAG }}
         id: docker_build
 
       - name: Output the image tag
@@ -54,7 +54,7 @@ jobs:
         env:
           IMAGE_TAG: ${{ github.run_number }}
         run: |
-          sed -i 's|image:.*|image: minjuncho/team4-fe:${{ env.IMAGE_TAG }}|' service/team4-fe/team4-fe.yaml
+          sed -i 's|image:.*|image: minjuncho/ai4028-fe:${{ env.IMAGE_TAG }}|' service/ai4028-fe/ai4028-fe.yaml
 
       - name: commit and push
         run: |
