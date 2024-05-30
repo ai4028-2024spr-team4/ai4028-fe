@@ -1,6 +1,7 @@
 from pathlib import Path
 
 import streamlit as st
+# asd
 
 st.title("나만의 작은 교수님")
 from st_pages import Page, add_page_title, show_pages, Section, hide_pages
