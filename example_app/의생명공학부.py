@@ -68,7 +68,7 @@ for major, info in majors.items():
                     help=f"{major} 홈페이지로 이동합니다.", 
                     **{"class": "stButton", "style": "display: none;"})        
         with col2:
-            if st.button(f"{major} 연구실 정보", key=f"{major}_next"):
+            if st.button(f"{major} 정보", key=f"{major}_next"):
                 st.switch_page(info['next_page'])
 
 

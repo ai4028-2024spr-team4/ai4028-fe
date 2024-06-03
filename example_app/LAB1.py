@@ -8,24 +8,30 @@ from PIL import Image
 load_dotenv('secrets.env')
 api_key = os.getenv('OPENAI_API_KEY')
 
-add_page_title()
+st.title("네트워크기반 지능 연구실")
 hide_pages(["LAB1"])
 
-st.write("AI 대학원은 ~~~~ ")
-st.write("This is just a sample page!?")
+st.write(" We like to code. We like Big Things (Kubernetes, HPC). We like startups.")
 
-st.title("김종원 교수님")
+st.write(" We like the convergence of AI with other fields.")
+
+st.write(" We love to treat all of these like toys and do the most tech-intensive research in the world.")
+
+st.write(" Do you think so too? Check out our playground and start your research! ")
+
+
+st.header("김종원 교수님")
 example_image = Image.open("example_app\jongwon.png")
 
 
-if not api_key:
-    st.error("API 키를 찾을 수 없습니다. OPENAI_API_KEY 환경 변수를 설정해주세요.")
-else:
-    openai.api_key = api_key
+# if not api_key:
+#     st.error("API 키를 찾을 수 없습니다. OPENAI_API_KEY 환경 변수를 설정해주세요.")
+# else:
+#     openai.api_key = api_key
 
 col1, col2 = st.columns([2, 2])
 with col1:
-    st.image(example_image, caption="예시 이미지", use_column_width=True)
+    st.image(example_image, caption="김종원 교수", use_column_width=True)
 with col2:
     if "openai_model" not in st.session_state:
         st.session_state["openai_model"] = "gpt-3.5-turbo"
