@@ -3,8 +3,10 @@ from st_pages import add_page_title, hide_pages
 import openai
 import os 
 from dotenv import load_dotenv
+from PIL import Image
 
 load_dotenv('secrets.env')
+api_key = os.getenv('OPENAI_API_KEY')
 
 add_page_title()
 hide_pages(["LAB1"])
@@ -13,9 +15,9 @@ st.write("AI 대학원은 ~~~~ ")
 st.write("This is just a sample page!?")
 
 st.title("김종원 교수님")
-example_image = "https://via.placeholder.com/300"
+example_image = Image.open("example_app\jongwon.png")
 
-api_key = os.getenv('OPENAI_API_KEY')
+
 if not api_key:
     st.error("API 키를 찾을 수 없습니다. OPENAI_API_KEY 환경 변수를 설정해주세요.")
 else:
