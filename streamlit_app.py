@@ -56,22 +56,22 @@ st.markdown(
 majors = {
     "AI대학원": {
         "description": "이 대학원은 T.R.A.I.N. 교육과 G.I.S.T. AI for X 연구를 통해 AI 인재를 육성하며, 자기주도적 학습과 현장감각을 갖추고, 다양한 AI 기술을 활용하여 문제를 해결하는 능력을 갖춘 AI 융합 인재를 양성합니다. AI 융합 인재는 새로운 문제를 발견하고 해결하는 문제 해결력, 고급 AI 기술과 창의적 사고를 갖추는 기술력, 그리고 다양한 사람들과 의사소통하며 사업화와 창업을 추진할 수 있는 사업화 능력을 갖추게 됩니다.",
-        "homepage": "https://ai.university.example",
+        "homepage": "https://ai.gist.ac.kr/ai/",
         "next_page": "example_app/AI대학원.py"
     },
     "물리광과학과": {
         "description": "이 학과는 첨단 연구시설을 활용해 물리학 및 광과학 분야의 세계적 연구 인력을 양성하고, 나노과학과 펨토과학을 연구합니다. 물리 및 광과학 지식을 다양한 분야에 적용해 창의적인 융합기술을 개발하며, 미래 기술을 개척할 전문 인력을 배출합니다. 고등광기술연구소와 IBS 초강력 레이저과학 연구단이 참여하여 인력양성 사업을 수행합니다.",
-        "homepage": "https://physics.university.example",
+        "homepage": "https://physics.gist.ac.kr/",
         "next_page": "example_app/물리광과학과.py"
     },
     "전기전자컴퓨터공학부": {
         "description": "본 학부는 인공지능, 빅데이터, 클라우드컴퓨팅, 바이오 정보 등 첨단 기술 분야에서 연구를 선도하며, 전기전자컴퓨터 분야의 중요한 산업을 주도할 핵심 기술 개발에 집중합니다. 다양한 학문 분야의 석·박사 학생들이 협력하여 창의적 연구를 수행하고, 이를 통해 국가의 미래를 이끌 과학기술 인재를 양성합니다. BK21플러스사업, 노벨연구센터 등 여러 연구센터와의 협력을 통해 세계적 연구와 기술 상용화에 앞장서고 있습니다.",
-        "homepage": "https://eece.university.example",
+        "homepage": "https://eecs.gist.ac.kr/",
         "next_page": "example_app/전기전자컴퓨터공학부.py"
     },
     "의생명공학부": {
         "description": "이 학과는 첨단 연구시설을 활용해 물리학 및 광과학 분야의 세계적 연구 인력을 양성하고, 나노과학과 펨토과학을 연구합니다. 물리 및 광과학 지식을 다양한 분야에 적용해 창의적인 융합기술을 개발하며, 미래 기술을 개척할 전문 인력을 배출합니다. 고등광기술연구소와 IBS 초강력 레이저과학 연구단이 참여하여 인력양성 사업을 수행합니다.",
-        "homepage": "https://biomedical.university.example",
+        "homepage": "https://bmse.gist.ac.kr/",
         "next_page": "example_app/의생명공학부.py"
     }
 }
