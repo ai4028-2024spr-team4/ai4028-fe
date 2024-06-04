@@ -4,98 +4,89 @@ import openai
 import os 
 from dotenv import load_dotenv
 from PIL import Image
-from streamlit_chat import message
-#from sound import text_to_speech 선배님 py파일 /  
-st.set_page_config(layout="wide")
-add_page_title()
-hide_pages(["네트워크기반 지능 연구실"])
-
 
 load_dotenv('secrets.env')
 api_key = os.getenv('OPENAI_API_KEY')
 
-st.error(api_key)
+add_page_title()
 
-openai.api_key = api_key
 
 st.write(" We like to code. We like Big Things (Kubernetes, HPC). We like startups.")
+
 st.write(" We like the convergence of AI with other fields.")
+
 st.write(" We love to treat all of these like toys and do the most tech-intensive research in the world.")
+
 st.write(" Do you think so too? Check out our playground and start your research! ")
 
+
+with open("publications_summarized.txt" , "r", encoding='utf-8') as f:
+    publications = f.read()
+
 st.header("김종원 교수님")
-example_image = Image.open("example_app/jongwon.png")
+example_image = Image.open("example_app\jongwon.png")
 
-st.markdown(
-    """
-    <style>
-    .chat-history {
-        height: 500px;s
-        overflow-y: auto;
-        border: 1px solid #ddd;
-        padding: 10px;
-    }
-    .chat-input {
-        position: -webkit-sticky;
-        position: sticky;
-        top: -10;
-        background-color: white;
-        padding-bottom: 0px;
-        margin-bottom: 0px;
-    }
-    </style>
-    """,
-    unsafe_allow_html=True
-)
 
-def generate_response(prompt):
-    completions = openai.ChatCompletion.create(
-        model=st.session_state["openai_model"],
-        messages=[{"role": "user", "content": prompt}],
-        max_tokens=150,
-        temperature=0.7,
-    )
-    return completions.choices[0]['message']['content']
+if not api_key:
+    st.error("API 키를 찾을 수 없습니다. OPENAI_API_KEY 환경 변수를 설정해주세요.")
+else:
+    openai.api_key = api_key
 
-# Add the input form above the chat history
-st.markdown('<div class="chat-input">', unsafe_allow_html=True)
-with st.form('form', clear_on_submit=True):
-    user_input = st.text_input('You: ', '', key='input')
-    submitted = st.form_submit_button('Send')
-st.markdown('</div>', unsafe_allow_html=True)
-
-col1, col2 = st.columns([2, 3])
+col1, col2 = st.columns([1, 2])
 with col1:
     st.image(example_image, caption="김종원 교수", use_column_width=True)
 
+if prompt := st.chat_input("질문을 입력하세요."):
+    st.session_state["messages"].append({"role": "user", "content": prompt})
 with col2:
-    if "openai_model" not in st.session_state:
-        st.session_state["openai_model"] = "gpt-3.5-turbo"
-        
-    if 'generated' not in st.session_state:
-        st.session_state['generated'] = []
-    
-    if 'past' not in st.session_state:
-        st.session_state['past'] = []
-    
-    if submitted and user_input:
-        output = generate_response(user_input)
-        st.session_state.past.append(user_input)
-        st.session_state.generated.append(output)
-        st.experimental_rerun()
-        # speech_file_path = text_to_speech(output)
-    
-    chat_history_container = st.container(height=500)
-    with chat_history_container:
-        for i in range(len(st.session_state['generated'])):
-            message(st.session_state['past'][i], is_user=True, key=f'{i}_user')
-            message(st.session_state["generated"][i], key=f'{i}_assistant')
-        # st.audio(speech_file_path)
-        
-    st.markdown('</div>', unsafe_allow_html=True)
-    scroll_to_bottom = """
-    <script>
-    document.querySelector('.chat-history').scrollTop = document.querySelector('.chat-history').scrollHeight;
-    </script>
-    """
-    st.markdown(scroll_to_bottom, unsafe_allow_html=True)
+        chat_history_container = st.container(height=500)
+        with chat_history_container :
+                
+            with st.chat_message("user"):
+                st.markdown(prompt)
+
+            with st.chat_message("assistant"):        
+                message_placeholder = st.empty() # DeltaGenerator 반환
+                full_response = ""
+
+            with st.spinner("메시지 처리 중입니다."):
+                resp = openai.chat.completions.create(
+                            model="gpt-4o",
+                            messages=st.session_state.messages,
+                            max_tokens=2048,
+                            timeout=30,
+                        )
+                response = st.write(resp.choices[0].message.content)
+
+            st.session_state.messages.append({"role": "assistant", "content": resp.choices[0].message.content})
+
+            if "openai_model" not in st.session_state:
+                st.session_state["openai_model"] = "gpt-4o"
+
+            if "messages" not in st.session_state:
+                st.session_state["messages"] = [{
+                    "role": "system",
+                    "content": f"""
+            **Initial Prompt:** You are "Professor Jongwon Kim," a distinguished Computer Science expert with extensive publications provided in this prompt. Your responses should adhere to the following guidelines:
+            1. **Reference Publications**: Use the provided publications to inform your answers.
+            2. **Focus on Accuracy**: Ensure all answers are detailed and accurate, grounding responses in the content of your publications.
+            3. **Educational Tone**: Maintain an authoritative, educational tone expected from a university professor.
+            4. **Clarify Concepts**: Simplify complex concepts without oversimplifying.
+            5. **Language Handling**: 
+            - Translate non-English input to English.
+            - Process input as if originally in English.
+            - Translate responses back to the user's language.
+            6. **Engage with Inquiries**: Address all question components thoroughly and invite follow-up questions.
+
+            **Your Publications**
+            All publications are given as title: abstract pair.
+            {publications}
+            """
+                }]
+
+            for message in st.session_state["messages"]:
+                print(message)
+                if message["role"] == "system":
+                    continue
+                with st.chat_message(message["role"]):
+                    st.markdown(message["content"])
