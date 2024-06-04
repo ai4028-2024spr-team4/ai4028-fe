@@ -6,6 +6,11 @@ from dotenv import load_dotenv
 from PIL import Image
 import base64
 import streamlit.components.v1 as components
+from kiwipiepy import Kiwi
+from langdetect import detect
+kiwi = Kiwi()
+import requests
+from urllib import parse
 # from sound import text_to_speech
 
 def autoplay_audio(file_path: str):
@@ -99,5 +104,20 @@ with col2:
                 print(message)
                 if message["role"] == "system":
                     continue
+                if message['role'] =="assistant" and (detect(message['content']) == "ko"):
+                    # 코드 변환 - 한국어를 그대로 보낼 수 없으므로 아래 방식으로 변환 필요.
+                    
+                    word_list = kiwi.split_into_sents(message['content'])
+                    for i in range(len(word_list)):
+                        texts = word_list[i].text.replace("*","")
+                        print(texts)
+                        encode  = parse.quote(texts)
+                        headers = {}
+                        json_data = {'text': encode,}
+
+                        response = requests.post('http://127.0.0.1:5000/predict', headers=headers, json=json_data)
+
+                        with open(f'output{i}.wav', 'wb') as f:
+                            f.write(response.content)
                 with st.chat_message(message["role"]):
                     st.markdown(message["content"])
