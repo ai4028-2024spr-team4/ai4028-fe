@@ -5,12 +5,13 @@ import os
 from dotenv import load_dotenv
 from PIL import Image
 from streamlit_chat import message
+#from sound import text_to_speech 선배님 py파일 /  
 st.set_page_config(layout="wide")
 add_page_title()
 hide_pages(["네트워크기반 지능 연구실"])
 
 
-load_dotenv('example_app/secrets.env')
+load_dotenv('secrets.env')
 api_key = os.getenv('OPENAI_API_KEY')
 
 st.error(api_key)
@@ -82,12 +83,15 @@ with col2:
         st.session_state.past.append(user_input)
         st.session_state.generated.append(output)
         st.experimental_rerun()
-
+        # speech_file_path = text_to_speech(output)
+    
     chat_history_container = st.container(height=500)
     with chat_history_container:
         for i in range(len(st.session_state['generated'])):
             message(st.session_state['past'][i], is_user=True, key=f'{i}_user')
             message(st.session_state["generated"][i], key=f'{i}_assistant')
+        # st.audio(speech_file_path)
+        
     st.markdown('</div>', unsafe_allow_html=True)
     scroll_to_bottom = """
     <script>
