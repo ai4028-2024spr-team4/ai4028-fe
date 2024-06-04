@@ -11,10 +11,10 @@ show_pages(
             Page("example_app/물리광과학과.py", name="물리광과학과"),
             Page("example_app/전기전자컴퓨터공학부.py", "전기전자컴퓨터공학부"),
             Page("example_app/의생명공학부.py", "의생명공학부"),
-            Page("example_app/LAB1.py", "LAB1"), 
+            Page("example_app/네트워크기반 지능 연구실.py", "네트워크기반 지능 연구실"), 
         ]
 )
-hide_pages(["LAB1"])
+hide_pages(["네트워크기반 지능 연구실"])
 
 add_page_title() 
 
