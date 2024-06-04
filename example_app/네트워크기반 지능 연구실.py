@@ -8,6 +8,7 @@ from streamlit_chat import message
 st.set_page_config(layout="wide")
 add_page_title()
 hide_pages(["네트워크기반 지능 연구실"])
+
 load_dotenv('secrets.env')
 api_key = os.getenv('OPENAI_API_KEY')
 openai.api_key = api_key
