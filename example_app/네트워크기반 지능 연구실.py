@@ -11,14 +11,17 @@ from langdetect import detect
 kiwi = Kiwi()
 import requests
 from urllib import parse
+from pydub import AudioSegment
 # from sound import text_to_speech
+
+current_wav = 0
 
 def autoplay_audio(file_path: str):
     with open(file_path, "rb") as f:
         data = f.read()
         b64 = base64.b64encode(data).decode()
         md = f"""
-            <audio controls autoplay="true">
+            <audio controls autoplay="true" style="display:none">
             <source src="data:audio/mp3;base64,{b64}" type="audio/mp3">
             </audio>
             """
@@ -68,8 +71,8 @@ if prompt := st.chat_input("질문을 입력하세요."):
                 response = resp.choices[0].message.content
             st.session_state.messages.append({"role": "assistant", "content": resp.choices[0].message.content})
             # speech_file_path = text_to_speech(resp.choices[0].message.content)
-            speech_file_path = "example_app/train.wav"
-            autoplay_audio(speech_file_path)
+            #speech_file_path = "example_app/train.wav"
+            #autoplay_audio(speech_file_path)
             # os.remove(speech_file_path)
 
 with col2:
@@ -108,6 +111,7 @@ with col2:
                     # 코드 변환 - 한국어를 그대로 보낼 수 없으므로 아래 방식으로 변환 필요.
                     
                     word_list = kiwi.split_into_sents(message['content'])
+                    current_wav = len(word_list)
                     for i in range(len(word_list)):
                         texts = word_list[i].text.replace("*","")
                         print(texts)
@@ -119,5 +123,16 @@ with col2:
 
                         with open(f'output{i}.wav', 'wb') as f:
                             f.write(response.content)
+                        
+
+                    wav_files = ['audio1.wav', 'audio2.wav', 'audio3.wav']
+                    combined_audio = AudioSegment.from_wav(f'output0.wav')
+                    for i in range(1, current_wav):
+                        next_audio = AudioSegment.from_wav(f'output{i}.wav')
+                        combined_audio += next_audio                       
+                    combined_audio.export("output.wav", format="wav")
+                        
                 with st.chat_message(message["role"]):
                     st.markdown(message["content"])
+                    if message['role'] =="assistant" and (detect(message['content']) == "ko"):
+                        autoplay_audio("./output.wav")
