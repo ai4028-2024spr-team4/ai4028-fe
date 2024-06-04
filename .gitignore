@@ -16,7 +16,7 @@ __pycache__
 .tox/
 
 .streamlit/secrets.toml
-secrets.env
+example_app/secrets.env
 
 
 *.png

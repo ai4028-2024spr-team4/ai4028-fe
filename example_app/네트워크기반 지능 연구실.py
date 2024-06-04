@@ -9,8 +9,12 @@ st.set_page_config(layout="wide")
 add_page_title()
 hide_pages(["네트워크기반 지능 연구실"])
 
-load_dotenv('secrets.env')
+
+load_dotenv('example_app/secrets.env')
 api_key = os.getenv('OPENAI_API_KEY')
+
+st.error(api_key)
+
 openai.api_key = api_key
 
 st.write(" We like to code. We like Big Things (Kubernetes, HPC). We like startups.")
@@ -25,7 +29,7 @@ st.markdown(
     """
     <style>
     .chat-history {
-        height: 500px;
+        height: 500px;s
         overflow-y: auto;
         border: 1px solid #ddd;
         padding: 10px;
