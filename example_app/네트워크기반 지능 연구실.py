@@ -4,10 +4,26 @@ import openai
 import os 
 from dotenv import load_dotenv
 from PIL import Image
+import base64
+import streamlit.components.v1 as components
+# from sound import text_to_speech
+
+def autoplay_audio(file_path: str):
+    with open(file_path, "rb") as f:
+        data = f.read()
+        b64 = base64.b64encode(data).decode()
+        md = f"""
+            <audio controls autoplay="true">
+            <source src="data:audio/mp3;base64,{b64}" type="audio/mp3">
+            </audio>
+            """
+        st.markdown(
+            md,
+            unsafe_allow_html=True,
+        )
 
 load_dotenv('secrets.env')
 api_key = os.getenv('OPENAI_API_KEY')
-
 add_page_title()
 
 
@@ -26,7 +42,6 @@ with open("publications_summarized.txt" , "r", encoding='utf-8') as f:
 st.header("김종원 교수님")
 example_image = Image.open("example_app\jongwon.png")
 
-
 if not api_key:
     st.error("API 키를 찾을 수 없습니다. OPENAI_API_KEY 환경 변수를 설정해주세요.")
 else:
@@ -37,29 +52,25 @@ with col1:
     st.image(example_image, caption="김종원 교수", use_column_width=True)
 
 if prompt := st.chat_input("질문을 입력하세요."):
-    st.session_state["messages"].append({"role": "user", "content": prompt})
-with col2:
-        chat_history_container = st.container(height=500)
-        with chat_history_container :
-                
-            with st.chat_message("user"):
-                st.markdown(prompt)
-
-            with st.chat_message("assistant"):        
-                message_placeholder = st.empty() # DeltaGenerator 반환
-                full_response = ""
-
+            st.session_state["messages"].append({"role": "user", "content": prompt})    
             with st.spinner("메시지 처리 중입니다."):
                 resp = openai.chat.completions.create(
-                            model="gpt-4o",
+                            model="gpt-3.5-turbo",
                             messages=st.session_state.messages,
                             max_tokens=2048,
                             timeout=30,
                         )
-                response = st.write(resp.choices[0].message.content)
-
+                response = resp.choices[0].message.content
             st.session_state.messages.append({"role": "assistant", "content": resp.choices[0].message.content})
+            # speech_file_path = text_to_speech(resp.choices[0].message.content)
+            speech_file_path = "example_app/train.wav"
+            autoplay_audio(speech_file_path)
+            # os.remove(speech_file_path)
 
+with col2:
+        chat_history_container = st.container(height=500)
+
+        with chat_history_container :
             if "openai_model" not in st.session_state:
                 st.session_state["openai_model"] = "gpt-4o"
 
