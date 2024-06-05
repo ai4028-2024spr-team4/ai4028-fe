@@ -48,7 +48,7 @@ with open("publications_summarized.txt" , "r", encoding='utf-8') as f:
     publications = f.read()
 
 st.header("김종원 교수님")
-example_image = Image.open("example_app\jongwon.png")
+example_image = Image.open("example_app/jongwon.png")
 
 if not api_key:
     st.error("API 키를 찾을 수 없습니다. OPENAI_API_KEY 환경 변수를 설정해주세요.")
