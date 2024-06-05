@@ -10,6 +10,7 @@ permissions:
 jobs:
   build:
     runs-on: ubuntu-latest
+    environment: prod
     outputs:
       IMAGE_TAG: ${{ github.run_number }}
 
@@ -22,6 +23,10 @@ jobs:
         with:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
+
+      - name: setup environment
+        run: |
+          echo "${{ vars.ENV }}"  >> secrets.env
 
       - name: Build and push Docker image
         uses: docker/build-push-action@v3
